@@ -22,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.sample.app.model.CustomJsonResponse;
 import com.sample.app.model.Employee;
-import com.sample.app.repository.impl.EmployeeRepository;
+import com.sample.app.service.EmployeeService;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
@@ -32,7 +32,7 @@ public class EmployeeControllerTest {
 	EmployeeController employeeController;
 	
 	@Mock
-	EmployeeRepository employeeRepository;
+	EmployeeService employeeService;
 	
 	static Employee employee;
 	
@@ -47,7 +47,7 @@ public class EmployeeControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-		when(employeeRepository.getEmployeeById(Mockito.anyInt())).thenReturn(employee);		
+		when(employeeService.getEmployeeById(Mockito.anyInt())).thenReturn(employee);		
 
 		ResponseEntity<Employee> responseEntity = employeeController.getEmployeeById(1);
 		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
@@ -62,7 +62,7 @@ public class EmployeeControllerTest {
 		employees.add(new Employee(2, "David", 22, 1000, "NY", 2));
 		employees.add(new Employee(3, "Mike", 21, 2000, "CL", 3));
 	
-		when(employeeRepository.getAllEmployee()).thenReturn(employees);		
+		when(employeeService.getAllEmployee()).thenReturn(employees);		
 
 		ResponseEntity<List<Employee>> responseEntity = employeeController.getAllEmployee();
 		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
@@ -72,7 +72,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void testAddEmployee() throws Exception {
 		
-		when(employeeRepository.addEmployee(Mockito.any())).thenReturn("Employee added");
+		when(employeeService.addEmployee(Mockito.any())).thenReturn("Employee added");
 		
 		ResponseEntity<CustomJsonResponse> responseEntity = employeeController.addEmployee(employee);
 		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(201);
@@ -82,7 +82,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void testUpdateEmployee() throws Exception {
 		
-		when(employeeRepository.updateEmployee(Mockito.anyInt(), Mockito.any())).thenReturn(employee);
+		when(employeeService.updateEmployee(Mockito.anyInt(), Mockito.any())).thenReturn(employee);
 		
 		ResponseEntity<Employee> responseEntity = employeeController.updateEmployee(1, employee);
 		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
@@ -93,7 +93,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void testDeleteEmployeeById() throws Exception {
 		
-		when(employeeRepository.deleteEmployee(Mockito.anyInt())).thenReturn("Employee deleted");
+		when(employeeService.deleteEmployee(Mockito.anyInt())).thenReturn("Employee deleted");
 		
 		ResponseEntity<CustomJsonResponse> responseEntity = employeeController.deleteEmployee(1);
 		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
